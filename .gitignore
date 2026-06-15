@@ -1,0 +1,15 @@
+*
+!*/
+!.gitignore
+!*.R
+!*.r
+!*.md
+.Rproj.user/
+*.Rproj
+*.Rhistory
+*.Rdata
+Products/*
+Data/*
+!Data/Validation/
+!Data/Validation/**
+!BCFireCube_Codebook.pdf
