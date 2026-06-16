@@ -73,11 +73,18 @@ df$polydist <- st_distance(point, poly, by_element = TRUE)
 #generate identifier for whether the point is inside the polygon
 df <- df %>% mutate(within = as.numeric(polydist) == 0)
 
+#generate identifier for whether the point is within 100m of the polygon
+df <- df %>% mutate(within.100 = as.numeric(polydist) <= 100)
+
+#generate identifier for whether the point is within 1000m of the polygon
+df <- df %>% mutate(within.1000 = as.numeric(polydist) <= 1000)
+
 ## Step 8: Organize results and export data
 
 #organize variables
 df <- df %>% select(c("firelabel", "label", "area", "dist", "polydist",
-                      "error", "smallerror", "mediumerror", "largeerror", "within"))
+                      "error", "smallerror", "mediumerror", "largeerror",
+                      "within", "within.100", "within.1000"))
 
 #generate summary
 summary(df)
@@ -93,6 +100,33 @@ meanlargeerror <- mean(df$largeerror)
 
 #calculate within percentage
 meanwithin <- mean(df$within)
+
+#calculate 100m within percentage
+meanwithin.100 <- mean(df$within.100)
+
+#calculate 1000m within percentage
+meanwithin.1000 <- mean(df$within.1000)
+
+#filter dataframe to fires larger than 1000ha
+dlarge <- df %>% filter(area >= 10000000)
+
+#calculate small error percentage
+fmeansmallerror <- mean(dlarge$smallerror)
+
+#calculate medium error percentage
+fmeanmediumerror <- mean(dlarge$mediumerror)
+
+#calculate large error percentage
+fmeanlargeerror <- mean(dlarge$largeerror)
+
+#calculate within percentage of filtered fires
+fmeanwithin <- mean(dlarge$within)
+
+#calculate 100m within percentage
+fmeanwithin.100 <- mean(dlarge$within.100)
+
+#calculate 1000m within percentage
+fmeanwithin.1000 <- mean(dlarge$within.1000)
 
 #save data
 write.csv(df, "Data/Validation/validation_2026_bcfire.csv", row.names = FALSE)
