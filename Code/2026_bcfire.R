@@ -842,10 +842,10 @@ rm(biom, dpoly2021.2023, poly2021.2023)
 #clear garbage
 gc()
 
-## Step 9.13: Remove WUI and save dataframe
+## Step 9.13: Remove WUI and ownership, save dataframe
 
-#remove wui
-dpoly <- dpoly %>% select(-c(avgwui))
+#remove wui and ownership
+dpoly <- dpoly %>% select(-c(avgwui, avgownership))
 
 #write csv
 write.csv(dpoly, "Products/2026_bcfire_polygondata.csv", row.names = FALSE)
@@ -1286,7 +1286,7 @@ gc()
 ## Step 10.13: Remove irrelevant variables
 
 #remove geom, ID, WUI
-dpoint <- dpoint %>% select(-c(geom, ID, wui))
+dpoint <- dpoint %>% select(-c(geom, ID, wui, ownership))
 
 ## Step 10.14: Save dataframe
 
@@ -1299,12 +1299,12 @@ write.csv(dpoint, "Products/2026_bcfire_pointdata.csv", row.names = FALSE)
 dboth <- dpoint %>% filter(label %in% dpoly$label) %>% 
   left_join(dpoly, by = c("firelabel", "label", "cause"))
 
-#reorder variables; NOTE: WUI DATA EXCLUDED
+#reorder variables; NOTE: WUI AND OWNERSHIP DATA EXCLUDED
 dboth <- dboth %>% select(c("firelabel", "label", "date", "igndate", "outdate", "burnlength",
                             "area_sqm", "datasource", "creationnotes", "cause", "fire_centre", "fire_zone",
                             "firetype", "responsetype", "elevation", "avgelevation", "slope", "avgslope",
-                            "ownership", "avgownership", "landcover", "avglandcover",
-                            "beccode", "avgbeccode", "ndtcode", "avgndtcode", "fueltype", "avgfueltype",
+                            "landcover", "avglandcover", "beccode", "avgbeccode", 
+                            "ndtcode", "avgndtcode", "fueltype", "avgfueltype",
                             "population", "avgpopulation", "dwellings", "avgdwellings", "forestage",
                             "avgforestage", "biomass", "avgbiomass"))
 
